@@ -1,16 +1,16 @@
 package loanTypes;
 
+import models.Input;
 import models.LoanSchedule;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public abstract class Loan {
 
-    protected int value; //wielkosc kredytu
-    protected int installmentCount; //rata
-    protected double interest; //oprocentowanie
-    protected double fixedFee; // oplata stala
+    protected int value;
+    protected int installmentCount;
+    protected double interest;
+    protected double fixedFee;
 
     public Loan(int value, int installmentCount, double interest, double fixedFee) {
         this.value = value;
@@ -20,8 +20,6 @@ public abstract class Loan {
     }
 
     public abstract ArrayList<LoanSchedule> calculateInstallment();
-
-
 }
 
 

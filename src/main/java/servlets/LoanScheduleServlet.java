@@ -1,11 +1,11 @@
 package servlets;
 
 
-import Utils.PDFCreator;
-import com.itextpdf.text.DocumentException;
+import calculations.InputParser;
 import loanTypes.Constance;
 import loanTypes.Descend;
 import loanTypes.Loan;
+import models.Input;
 import models.LoanSchedule;
 
 import javax.servlet.ServletException;
@@ -23,38 +23,40 @@ public class LoanScheduleServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Input input = castInput(request);
+        Loan loan;
 
-            if (request.getParameter("loanType").equals("const")) {
-                response.getWriter().println("Raty stale");
+        if (request.getParameter("loanType").equals("const")) {
+            response.getWriter().println("Raty stale");
 
-                int value = Integer.parseInt(request.getParameter("loanValue"));
-                int installment = Integer.parseInt(request.getParameter("loanInstallment"));
-                double interest = Double.parseDouble(request.getParameter("loanInterest"));
-                double fixedFee = Double.parseDouble(request.getParameter("fixedFee"));
+            loan = new Constance(input.getValue(), input.getInstallment(), input.getInterest(), input.getFixedFee());
 
-                Loan loan = new Constance(value, installment, interest, fixedFee);
-                ArrayList<LoanSchedule> loanTableArrayList = loan.calculateInstallment();
+        } else if (request.getParameter("loanType").equals("desc")) {
+            response.getWriter().println("Raty malejace");
 
-                request.setAttribute("loanTableArrayList", loanTableArrayList);
-                request.getRequestDispatcher("LoanSchedule.jsp").forward(request, response);
-            }
-            else if (request.getParameter("loanType").equals("desc")) {
-                response.getWriter().println("Raty malejace");
+            loan = new Descend(input.getValue(), input.getInstallment(), input.getInterest(), input.getFixedFee());
 
-                int value = Integer.parseInt(request.getParameter("loanValue"));
-                int installment = Integer.parseInt(request.getParameter("loanInstallment"));
-                double interest = Double.parseDouble(request.getParameter("loanInterest"));
-                double fixedFee = Double.parseDouble(request.getParameter("fixedFee"));
+        } else
+            loan = null;
 
+        ArrayList<LoanSchedule> loanTableArrayList;
+        if (loan != null) {
+            loanTableArrayList = loan.calculateInstallment();
+            request.setAttribute("loanTableArrayList", loanTableArrayList);
+            request.getRequestDispatcher("LoanSchedule.jsp").forward(request, response);
+        } else
+            response.sendRedirect("/");
+    }
 
-                Loan loan = new Descend(value, installment, interest, fixedFee);
-                ArrayList<LoanSchedule> loanTableArrayList = loan.calculateInstallment();
+    private Input castInput(HttpServletRequest request) {
+        String value = request.getParameter("loanValue");
+        String installment = request.getParameter("loanInstallment");
+        String interest = request.getParameter("loanInterest");
+        String fixedFee = request.getParameter("fixedFee");
+        String loanType = request.getParameter("loanType");
 
-                request.setAttribute("loanTableArrayList", loanTableArrayList);
-                request.getRequestDispatcher("LoanSchedule.jsp").forward(request, response);
-            }
-            else
-                response.sendRedirect("/");
-        }
+        Input input = InputParser.parseInput(value, installment, interest, fixedFee, loanType);
+        return input;
+    }
 }
 

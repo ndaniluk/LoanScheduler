@@ -1,7 +1,8 @@
 package loanTypes;
 
-import Utils.Rounder;
+import calculations.Rounder;
 import models.LoanSchedule;
+
 import java.util.ArrayList;
 
 public class Descend extends Loan {
@@ -11,7 +12,7 @@ public class Descend extends Loan {
         this.fixedFee /= this.installmentCount;
     }
 
-    public ArrayList<LoanSchedule> calculateInstallment(){
+    public ArrayList<LoanSchedule> calculateInstallment() {
         double capital = this.value / this.installmentCount;
         capital = Rounder.round(capital);
         ArrayList<LoanSchedule> allInstallments = new ArrayList<LoanSchedule>();

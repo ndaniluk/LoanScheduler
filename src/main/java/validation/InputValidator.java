@@ -20,8 +20,8 @@ public class InputValidator {
                 break;
             }
 
-            if(!isDigit(request, parameterNames.get(i))){
-                if(parameterNames.get(i).equals("loanType") || parameterNames.get(i).equals("submit"))
+            if (!isDigit(request, parameterNames.get(i))) {
+                if (parameterNames.get(i).equals("loanType") || parameterNames.get(i).equals("submit"))
                     continue;
                 flag = false;
                 break;
@@ -31,15 +31,16 @@ public class InputValidator {
         return flag;
     }
 
-    private boolean isEmpty(HttpServletRequest request, String parameter){
-        if(request.getParameter(parameter).equals(""))
+    private boolean isEmpty(HttpServletRequest request, String parameter) {
+        if (request.getParameter(parameter).equals(""))
             return false;
         return true;
     }
-    private boolean isDigit(HttpServletRequest request, String parameter){
-        try{
+
+    private boolean isDigit(HttpServletRequest request, String parameter) {
+        try {
             Double.parseDouble(request.getParameter(parameter));
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
         return true;

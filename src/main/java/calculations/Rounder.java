@@ -1,4 +1,4 @@
-package Utils;
+package calculations;
 
 public class Rounder {
     public static double round(double a) {

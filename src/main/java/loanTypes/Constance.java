@@ -1,6 +1,6 @@
 package loanTypes;
 
-import Utils.Rounder;
+import calculations.Rounder;
 import models.LoanSchedule;
 
 import java.util.ArrayList;

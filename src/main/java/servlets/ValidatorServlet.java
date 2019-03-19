@@ -14,22 +14,21 @@ import java.util.List;
 
 @WebServlet("/Validator")
 public class ValidatorServlet extends HttpServlet {
-        public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendRedirect("/");
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Enumeration<String> parameterNamesEnum = request.getParameterNames();
+        List<String> parameterNames = Collections.list(parameterNamesEnum);
+
+        InputValidator validator = new InputValidator();
+        if (validator.validate(request, parameterNames)) {
+            for (String parameterName : parameterNames)
+                request.setAttribute(parameterName, request.getParameter(parameterName));
+            request.getRequestDispatcher("/LoanSchedule").forward(request, response);
+        } else
             response.sendRedirect("/");
-        }
-
-        public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-            Enumeration<String> parameterNamesEnum = request.getParameterNames();
-            List<String> parameterNames = Collections.list(parameterNamesEnum);
-
-            InputValidator validator = new InputValidator();
-            if(validator.validate(request, parameterNames)) {
-                for (String parameterName : parameterNames)
-                    request.setAttribute(parameterName, request.getParameter(parameterName));
-                request.getRequestDispatcher("/LoanSchedule").forward(request, response);
-            }
-            else
-                response.sendRedirect("/");
-        }
+    }
 
 }

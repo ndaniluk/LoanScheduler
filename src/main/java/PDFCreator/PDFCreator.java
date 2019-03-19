@@ -1,6 +1,7 @@
-package Utils;
+package PDFCreator;
 
-import com.itextpdf.text.*;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import models.LoanSchedule;
@@ -25,8 +26,8 @@ public class PDFCreator {
         table.addCell("Calkowita kwota raty");
         table.setHeaderRows(1);
 
-        for(int i = 0; i < loanSchedules.size(); i++){
-            table.addCell((i+1) + "");
+        for (int i = 0; i < loanSchedules.size(); i++) {
+            table.addCell((i + 1) + "");
             table.addCell(loanSchedules.get(i).getCapital() + "zl");
             table.addCell(loanSchedules.get(i).getInterest() + "zl");
             table.addCell(loanSchedules.get(i).getFixedFee() + "zl");
